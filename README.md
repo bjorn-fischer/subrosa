@@ -28,6 +28,22 @@ cumbersome to set up? Then **subrosa** might do the trick:
 You can run Firefox in real offline mode. Or your favorite GIS mapping
 software.
 
+Please note that the loopback device **lo0** in the newly created name
+space has no connectivity to the loopback device on the host:
+
+    [bf@βελλεροφων:~]$ nc -l -t -p 1234 127.0.0.1 &
+    [1] 23623
+    [bf@βελλεροφων:~]$ subrosa telnet 127.0.0.1 1234
+    Trying 127.0.0.1...
+    telnet: connect to address 127.0.0.1: Connection refused
+    [bf@βελλεροφων:~]$ telnet 127.0.0.1 1234
+    Trying 127.0.0.1...
+    Connected to 127.0.0.1.
+    Escape character is '^]'.
+    ^]
+    telnet> close
+    Connection closed.
+
 ## Compiling and Installing
 
 Just compile ```subrosa.c``` with your favorite C compiler, no extra
