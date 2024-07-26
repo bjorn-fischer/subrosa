@@ -49,13 +49,14 @@ int main(int argc, char *argv[]) {
      * ip link lo set up
      */
     msg = "Could not setup loopback interface";
-    fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
+    if ((fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP)) < 0) goto fail;
     strncpy(ifr.ifr_name, if_name, IFNAMSIZ);
     if (ioctl(fd, SIOCGIFFLAGS, &ifr) < 0) goto fail;
                                               // ifr_name after
     strncpy(ifr.ifr_name, if_name, IFNAMSIZ); // SIOCGIFFLAGS is unspecified
     ifr.ifr_flags |= (IFF_UP | IFF_RUNNING);
     if (ioctl(fd, SIOCSIFFLAGS, &ifr) < 0) goto fail;
+    close(fd);
 
     /*
      * drop root privileges if we are suid root
